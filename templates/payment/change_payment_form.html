@@ -1,0 +1,13 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+
+    {% block submit_buttons_bottom %}
+    {% if original and not original.paid_out %}
+    <div class="submit-row">
+       <input type="submit" value="{% trans 'Выплатить' %}" name="_paybutton" />
+    </div>
+    {% endif %}
+
+    {{ block.super }}
+    {% endblock %}
