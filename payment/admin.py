@@ -1,11 +1,19 @@
+from django.contrib.auth.models import Group
 from django.contrib import admin
 from .models import User, Payment, Pay
 from django.utils import timezone
 from django import forms
 import requests
 
-admin.site.register(User)
+admin.site.unregister(Group)
 admin.site.register(Payment)
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    fields = ["first_last_name", "total_payment", "email", "phone",
+              "is_superuser","is_staff","password"]
+
 
 
 class PayAdminForm(forms.ModelForm):
@@ -16,7 +24,8 @@ class PayAdminForm(forms.ModelForm):
         url = "https://webhook.site/70093b5d-4aeb-4d20-84f7-a505b71150a9"
         response = requests.post(url, json={"account": invoice, "amount": pay})
         if not response.ok:
-            raise forms.ValidationError("Данная выплата не была успешной")
+            raise forms.ValidationError(f'''Данная выплата не была успешной.
+                                        Ответ сервера: {response.status_code}''')
 
     def clean(self):
         super().clean()

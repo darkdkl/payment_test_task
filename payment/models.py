@@ -34,7 +34,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(verbose_name='Почта', unique=True)
-    phone = models.CharField(verbose_name='Телефон',max_length=15,
+    phone = models.CharField(verbose_name='Телефон',max_length=30,
                                                           null=True,blank=True)
     first_last_name = models.CharField(verbose_name='Имя и Фамилия',
                                                                 max_length=250)
@@ -66,10 +66,14 @@ class Payment(models.Model):
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
 
+    def __str__(self):
+        return f"Платеж для: {self.author}"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.author.total_payment += self.payment * 0.3
         self.author.save()
+
 
 class Pay(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь",
@@ -90,4 +94,4 @@ class Pay(models.Model):
         verbose_name_plural = "Выплаты"
 
     def __str__(self):
-        return f"Выплата для {self.user}"
+        return f"Выплата для: {self.user}"
