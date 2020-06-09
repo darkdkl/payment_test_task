@@ -4,7 +4,7 @@ from .forms import PayForm
 
 
 def index(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated and request.method == 'POST':
         form = PayForm(request.POST, request=request)
         if form.is_valid():
             pay = form.save(commit=False)
