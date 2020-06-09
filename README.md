@@ -1,4 +1,3 @@
-# payment_test_task
 # test task "Платеж"
 
 
